@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+
 /**
  * @author xiaoyouming
  * @version 1.0
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class CommonRequest<T> {
     private String version;
     private String token;
+    @Valid
     private T data;
 
 }

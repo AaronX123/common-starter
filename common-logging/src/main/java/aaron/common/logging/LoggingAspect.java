@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2020-03-03
  */
 @Slf4j
-@ConfigurationProperties(prefix = "exam")
+@ConfigurationProperties(prefix = "aaron")
 @Aspect
 @Configuration
 public class LoggingAspect {
@@ -37,10 +37,10 @@ public class LoggingAspect {
     @Before(value = "aaron.common.logging.LoggingAspect.joinPoint()")
     public void logRequest(JoinPoint joinPoint){
         Object[] arg = joinPoint.getArgs();
-        log.info("请求的方法为:{}",joinPoint.getSignature().getName());
+        log.info("\n\n\n请求的方法为:{}\n",joinPoint.getSignature().getName());
         if (arg.length != 0){
             for (Object o : arg) {
-                log.info("请求为: {}",o.toString());
+                log.info("\n请求参数为: {}\n\n",o.toString());
                 if (o instanceof CommonRequest){
                     // 版本不匹配
                     if (version != null && !version.equals(((CommonRequest) o).getVersion())){
@@ -55,7 +55,7 @@ public class LoggingAspect {
 
     @AfterReturning(value = "aaron.common.logging.LoggingAspect.joinPoint()",returning = "o")
     public void logResponse(JoinPoint joinPoint, Object o){
-        log.info("{}方法响应为: {}",joinPoint.getSignature().getName(),o.toString());
+        log.info("\n\n{}方法响应为: {}\n\n",joinPoint.getSignature().getName(),o.toString());
         if (o instanceof CommonResponse){
             ((CommonResponse) o).setVersion(version);
         }
