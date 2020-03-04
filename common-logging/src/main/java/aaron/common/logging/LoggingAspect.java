@@ -9,6 +9,12 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author xiaoyouming
@@ -19,12 +25,9 @@ import org.springframework.context.annotation.Configuration;
 @Aspect
 @Configuration
 public class LoggingAspect {
+    public String GET = "GET";
 
     private String version;
-
-    public String getVersion() {
-        return version;
-    }
 
     public void setVersion(String version) {
         this.version = version;
@@ -36,7 +39,11 @@ public class LoggingAspect {
     @Before(value = "aaron.common.logging.LoggingAspect.joinPoint()")
     public void logRequest(JoinPoint joinPoint){
         Object[] arg = joinPoint.getArgs();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         log.info("\n\n\n请求的方法为:{}\n",joinPoint.getSignature().getName());
+        if (request != null && GET.equals(request.getMethod())){
+            return;
+        }
         if (arg.length != 0){
             for (Object o : arg) {
                 log.info("\n请求参数为: {}\n\n",o.toString());

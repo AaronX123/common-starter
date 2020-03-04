@@ -20,6 +20,12 @@ public class CommonResponse<T> {
     private String msg;
     private T data;
 
+    public CommonResponse(String code, String msg, T data){
+        this.code =code;
+        this.msg = msg;
+        this.data = data;
+    }
+
     @Override
     public String toString() {
         return "CommonResponse{" +

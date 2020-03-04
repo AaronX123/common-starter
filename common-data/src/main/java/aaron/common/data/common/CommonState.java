@@ -16,7 +16,7 @@ public class CommonState {
     public static final String SUCCESS_MSG = "请求成功";
     public static final String FAIL_MSG = "请求失败";
 
-    public String version;
+    private String version;
 
     public String getVersion() {
         return version;
