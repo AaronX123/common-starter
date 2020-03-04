@@ -2,14 +2,14 @@ package aaron.common.data.common;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * @author xiaoyouming
  * @version 1.0
  * @since 2020-03-03
  */
-@Configuration
-@ConfigurationProperties(prefix = "aaron")
+@Component
 public class CommonState {
     public static final String SUCCESS = "000";
     public static final String FAIL = "100";

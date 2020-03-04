@@ -1,6 +1,7 @@
 package autoconfigure;
 
 import aaron.common.aop.FullCommonFieldAspect;
+import aaron.common.data.common.CommonState;
 import aaron.common.logging.LoggingAspect;
 import aaron.common.utils.SnowFlake;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -108,5 +109,12 @@ public class CommonAutoConfiguration {
         LoggingAspect a = new LoggingAspect();
         a.setVersion(version);
         return a;
+    }
+
+    @Bean
+    public CommonState commonState(){
+        CommonState state = new CommonState();
+        state.setVersion(version);
+        return state;
     }
 }
