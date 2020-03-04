@@ -37,10 +37,10 @@ public class FullCommonFieldAspect {
     @Autowired
     SnowFlake snowFlake;
 
-    @Pointcut("@annotation(annotation.FullCommonFieldU)")
+    @Pointcut("@annotation(aaron.common.aop.annotation.FullCommonFieldU)")
     public void pointCutU(){}
 
-    @Pointcut("@annotation(annotation.FullCommonField)")
+    @Pointcut("@annotation(aaron.common.aop.annotation.FullCommonField)")
     public void pointCut(){}
 
     @Around(value = "pointCut()")

@@ -10,26 +10,9 @@ import org.springframework.stereotype.Component;
  * @since 2019-07-25
  */
 @Component
-@ConfigurationProperties(prefix = "aaron")
 public class SnowFlake {
     private long dataCenterId;
     private long machineId;
-
-    public long getDataCenterId() {
-        return dataCenterId;
-    }
-
-    public void setDataCenterId(long dataCenterId) {
-        this.dataCenterId = dataCenterId;
-    }
-
-    public long getMachineId() {
-        return machineId;
-    }
-
-    public void setMachineId(long machineId) {
-        this.machineId = machineId;
-    }
     /**
      * 开始时间截 (2015-01-01)
      */
@@ -95,6 +78,10 @@ public class SnowFlake {
     public SnowFlake(){
     }
 
+    public SnowFlake(int dataCenterId, int machineId){
+        this.dataCenterId = dataCenterId;
+        this.machineId = machineId;
+    }
     // ==============================Methods==========================================
 
     /**

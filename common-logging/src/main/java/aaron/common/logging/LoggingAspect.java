@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
  * @since 2020-03-03
  */
 @Slf4j
-@ConfigurationProperties(prefix = "aaron")
 @Aspect
 @Configuration
 public class LoggingAspect {
