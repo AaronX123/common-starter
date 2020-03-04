@@ -4,7 +4,9 @@ import aaron.common.data.exception.StarterError;
 import aaron.common.data.exception.StarterException;
 import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author xiaoyouming
@@ -23,6 +25,22 @@ public class CommonUtils {
         throw new StarterException(StarterError.COPY_PROPERTIES_ERROR);
     }
 
+    public <T> List<T> convertList(Class<T> targetClass, List<?> src){
+        if (isEmpty(src) || isEmpty(targetClass)){
+            throw new StarterException(StarterError.PARAMETER_IS_NULL);
+        }
+        List<T> res = new ArrayList<>();
+        for (Object o : src) {
+            try {
+                T t = targetClass.newInstance();
+                BeanUtils.copyProperties(o,t);
+                res.add(t);
+            } catch (Exception e) {
+                throw new StarterException(StarterError.COPY_PROPERTIES_ERROR);
+            }
+        }
+        return res;
+    }
     public boolean isEmpty(Collection collection){
         return collection == null || collection.size() == 0;
     }
@@ -31,6 +49,7 @@ public class CommonUtils {
         return array == null || array.length == 0;
     }
 
+    public boolean isEmpty(Object o){ return  o == null;}
     public boolean notNull(Object ... o){
         if (o == null){return false;}
         for (Object o1 : o) {
