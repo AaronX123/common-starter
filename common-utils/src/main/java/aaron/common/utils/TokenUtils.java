@@ -1,0 +1,24 @@
+package aaron.common.utils;
+
+import aaron.common.data.exception.StarterError;
+import aaron.common.data.exception.StarterException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * @author xiaoyouming
+ * @version 1.0
+ * @since 2020-03-04
+ */
+public class TokenUtils {
+    public static String getToken(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            return request.getHeader("X-Token");
+        }
+        throw new StarterException(StarterError.TOKEN_IS_NULL);
+    }
+}

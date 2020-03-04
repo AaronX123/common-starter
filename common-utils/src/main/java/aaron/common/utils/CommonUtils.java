@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2020-03-03
  */
 public class CommonUtils {
-    public <T> T copyProperties(Class<T> targetClass, Object src){
+    public static <T> T copyProperties(Class<T> targetClass, Object src){
         try {
             T res = targetClass.newInstance();
             BeanUtils.copyProperties(src,res);
@@ -25,7 +25,7 @@ public class CommonUtils {
         throw new StarterException(StarterError.COPY_PROPERTIES_ERROR);
     }
 
-    public <T> List<T> convertList(Class<T> targetClass, List<?> src){
+    public static <T> List<T> convertList(Class<T> targetClass, List<?> src){
         if (isEmpty(src) || isEmpty(targetClass)){
             throw new StarterException(StarterError.PARAMETER_IS_NULL);
         }
@@ -41,16 +41,16 @@ public class CommonUtils {
         }
         return res;
     }
-    public boolean isEmpty(Collection collection){
+    public static boolean isEmpty(Collection collection){
         return collection == null || collection.size() == 0;
     }
 
-    public boolean isEmpty(Object[] array){
+    public static boolean isEmpty(Object[] array){
         return array == null || array.length == 0;
     }
 
-    public boolean isEmpty(Object o){ return  o == null;}
-    public boolean notNull(Object ... o){
+    public static boolean isEmpty(Object o){ return  o == null;}
+    public static boolean notNull(Object ... o){
         if (o == null){return false;}
         for (Object o1 : o) {
             if (o1 == null){

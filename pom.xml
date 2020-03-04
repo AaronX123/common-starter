@@ -13,6 +13,7 @@
         <module>common-utils</module>
         <module>common-logging</module>
         <module>common-data</module>
+        <module>common-aop</module>
     </modules>
     <dependencies>
         <dependency>

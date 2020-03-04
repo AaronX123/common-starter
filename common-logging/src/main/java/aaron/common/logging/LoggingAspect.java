@@ -44,7 +44,7 @@ public class LoggingAspect {
                 if (o instanceof CommonRequest){
                     // 版本不匹配
                     if (version != null && !version.equals(((CommonRequest) o).getVersion())){
-                        throw new StarterException(StarterError.VERSION_NO_MATCH);
+                        throw new StarterException(StarterError.VERSION_NOT_MATCH);
                     }
                 }
             }
