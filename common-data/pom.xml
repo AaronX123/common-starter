@@ -92,14 +92,12 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.3.1</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus -->
+        <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-support -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus</artifactId>
-            <version>3.3.1</version>
+            <artifactId>mybatis-plus-support</artifactId>
+            <version>2.3.3</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
