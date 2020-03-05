@@ -2,6 +2,8 @@ package aaron.common.utils;
 
 import aaron.common.data.exception.StarterError;
 import aaron.common.data.exception.StarterException;
+import aaron.common.utils.jwt.JwtUtil;
+import aaron.common.utils.jwt.UserPermission;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -20,5 +22,14 @@ public class TokenUtils {
             return request.getHeader("X-Token");
         }
         throw new StarterException(StarterError.TOKEN_IS_NULL);
+    }
+
+    public static UserPermission getUser(){
+        String token = getToken();
+        try {
+            return JwtUtil.parseJwt(token);
+        } catch (Exception e) {
+            throw new StarterException(StarterError.TOKEN_PARSE_ERROR);
+        }
     }
 }
