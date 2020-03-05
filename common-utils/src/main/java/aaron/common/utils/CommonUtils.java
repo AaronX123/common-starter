@@ -23,12 +23,12 @@ public class CommonUtils {
         } catch (ReflectiveOperationException e) {
             // do nothing
         }
-        throw new StarterException(StarterError.COPY_PROPERTIES_ERROR);
+        throw new StarterException(StarterError.SYSTEM_COPY_PROPERTIES_ERROR);
     }
 
     public static <T> List<T> convertList(List<?> src, Class<T> targetClass){
         if (isEmpty(src) || isEmpty(targetClass)){
-            throw new StarterException(StarterError.PARAMETER_IS_NULL);
+            throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
         }
         List<T> res = new ArrayList<>();
         for (Object o : src) {
@@ -37,7 +37,7 @@ public class CommonUtils {
                 BeanUtils.copyProperties(o,t);
                 res.add(t);
             } catch (Exception e) {
-                throw new StarterException(StarterError.COPY_PROPERTIES_ERROR);
+                throw new StarterException(StarterError.SYSTEM_COPY_PROPERTIES_ERROR);
             }
         }
         return res;

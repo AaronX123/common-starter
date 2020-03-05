@@ -7,13 +7,10 @@ import aaron.common.data.exception.StarterException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -50,12 +47,12 @@ public class LoggingAspect {
                 if (o instanceof CommonRequest){
                     // 版本不匹配
                     if (version != null && !version.equals(((CommonRequest) o).getVersion())){
-                        throw new StarterException(StarterError.VERSION_NOT_MATCH);
+                        throw new StarterException(StarterError.SYSTEM_VERSION_NOT_MATCH);
                     }
                 }
             }
         }else {
-            throw new StarterException(StarterError.PARAMETER_IS_NULL);
+            throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
         }
     }
 

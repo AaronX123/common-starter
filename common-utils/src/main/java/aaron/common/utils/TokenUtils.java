@@ -21,7 +21,7 @@ public class TokenUtils {
             HttpServletRequest request = requestAttributes.getRequest();
             return request.getHeader("X-Token");
         }
-        throw new StarterException(StarterError.TOKEN_IS_NULL);
+        throw new StarterException(StarterError.SYSTEM_TOKEN_IS_NULL);
     }
 
     public static UserPermission getUser(){
@@ -29,7 +29,7 @@ public class TokenUtils {
         try {
             return JwtUtil.parseJwt(token);
         } catch (Exception e) {
-            throw new StarterException(StarterError.TOKEN_PARSE_ERROR);
+            throw new StarterException(StarterError.SYSTEM_TOKEN_PARSE_ERROR);
         }
     }
 }

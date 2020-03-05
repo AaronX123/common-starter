@@ -4,7 +4,6 @@ import aaron.common.aop.annotation.FullCommonField;
 import aaron.common.aop.annotation.FullCommonFieldU;
 import aaron.common.aop.enums.EnumOperation;
 import aaron.common.data.common.BaseDto;
-import aaron.common.data.common.CommonField;
 import aaron.common.data.exception.NestedExamException;
 import aaron.common.data.exception.StarterError;
 import aaron.common.data.exception.StarterException;
@@ -14,7 +13,6 @@ import aaron.common.utils.TokenUtils;
 import aaron.common.utils.jwt.JwtUtil;
 import aaron.common.utils.jwt.UserPermission;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -48,7 +46,7 @@ public class FullCommonFieldAspect {
         log.info("填充公共字段");
         Object[] params = joinPoint.getArgs();
         if (CommonUtils.isEmpty(params)){
-            throw new StarterException(StarterError.PARAMETER_IS_NULL);
+            throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
         }
         Object param = params[0];
         if (param instanceof BaseDto){
@@ -64,13 +62,13 @@ public class FullCommonFieldAspect {
                 if (e instanceof NestedExamException){
                     throw (NestedExamException)e;
                 }
-                throw new StarterException(StarterError.TOKEN_PARSE_ERROR);
+                throw new StarterException(StarterError.SYSTEM_TOKEN_PARSE_ERROR);
             }
             Long orgId = permission.getOrgId();
             Long companyId = permission.getCompanyId();
             Long operator = permission.getId();
             if (!CommonUtils.notNull(orgId,companyId,operator)){
-                throw new StarterException(StarterError.REQUIRED_PARAM_MISSING);
+                throw new StarterException(StarterError.SYSTEM_REQUIRED_PARAM_MISSING);
             }
             if (EnumOperation.INSERT.equals(op)){
                 dto.setId(snowFlake.nextId());
@@ -88,7 +86,7 @@ public class FullCommonFieldAspect {
             }
             return joinPoint.proceed(params);
         }
-        throw new StarterException(StarterError.PARAMETER_TYPE_NOT_MATCH);
+        throw new StarterException(StarterError.SYSTEM_PARAMETER_TYPE_NOT_MATCH);
     }
 
     @Around(value = "pointCutU()")
@@ -96,7 +94,7 @@ public class FullCommonFieldAspect {
         log.info("填充公共字段");
         Object[] params = joinPoint.getArgs();
         if (CommonUtils.isEmpty(params)){
-            throw new StarterException(StarterError.PARAMETER_IS_NULL);
+            throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
         }
         Object param = params[0];
         if (param instanceof BaseDto){
@@ -112,11 +110,11 @@ public class FullCommonFieldAspect {
                 if (e instanceof NestedExamException){
                     throw (NestedExamException)e;
                 }
-                throw new StarterException(StarterError.TOKEN_PARSE_ERROR);
+                throw new StarterException(StarterError.SYSTEM_TOKEN_PARSE_ERROR);
             }
             Long operator = permission.getId();
             if (!CommonUtils.notNull(operator)){
-                throw new StarterException(StarterError.REQUIRED_PARAM_MISSING);
+                throw new StarterException(StarterError.SYSTEM_REQUIRED_PARAM_MISSING);
             }
             if (EnumOperation.INSERT.equals(op)){
                 dto.setId(snowFlake.nextId());
@@ -132,6 +130,6 @@ public class FullCommonFieldAspect {
             }
             return joinPoint.proceed(params);
         }
-        throw new StarterException(StarterError.PARAMETER_TYPE_NOT_MATCH);
+        throw new StarterException(StarterError.SYSTEM_PARAMETER_TYPE_NOT_MATCH);
     }
 }

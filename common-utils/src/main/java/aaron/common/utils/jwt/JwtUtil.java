@@ -9,8 +9,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,7 +89,7 @@ public class JwtUtil {
         if(result < 0){
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             log.info("token已过期 ======= token的过期时间："+df.format(expireTime));
-            throw new StarterException(StarterError.TOKEN_EXPIRED);
+            throw new StarterException(StarterError.SYSTEM_TOKEN_EXPIRED);
         }
         UserPermission userPermission = new UserPermission();
         Map<String, Claim> map = jwt.getClaims();
