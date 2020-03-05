@@ -2,6 +2,7 @@ package aaron.common.utils;
 
 import aaron.common.data.exception.StarterError;
 import aaron.common.data.exception.StarterException;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
  * @since 2020-03-03
  */
 public class CommonUtils {
-    public static <T> T copyProperties(Class<T> targetClass, Object src){
+    public static <T> T copyProperties(Object src, Class<T> targetClass){
         try {
             T res = targetClass.newInstance();
             BeanUtils.copyProperties(src,res);
@@ -25,7 +26,7 @@ public class CommonUtils {
         throw new StarterException(StarterError.COPY_PROPERTIES_ERROR);
     }
 
-    public static <T> List<T> convertList(Class<T> targetClass, List<?> src){
+    public static <T> List<T> convertList(List<?> src, Class<T> targetClass){
         if (isEmpty(src) || isEmpty(targetClass)){
             throw new StarterException(StarterError.PARAMETER_IS_NULL);
         }
@@ -41,6 +42,12 @@ public class CommonUtils {
         }
         return res;
     }
+
+    public static <T> T copyComplicateObject(Object src, Class<T> target){
+        return JSON.parseObject(JSON.toJSONString(src),target);
+    }
+
+
     public static boolean isEmpty(Collection collection){
         return collection == null || collection.size() == 0;
     }

@@ -14,6 +14,7 @@ public enum  StarterError {
     TOKEN_IS_NULL("000006","Token为空"),
     TOKEN_PARSE_ERROR("000007","Token解析异常"),
     REQUIRED_PARAM_MISSING("000009","缺失必要参数"),
+    UNKNOWN_ERROR("000010","未知异常"),
     ;
     private String msg;
     private String code;

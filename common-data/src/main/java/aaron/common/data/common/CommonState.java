@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CommonState {
-    public static final String SUCCESS = "000";
-    public static final String FAIL = "100";
-    public static final String SUCCESS_MSG = "请求成功";
-    public static final String FAIL_MSG = "请求失败";
+    public final String SUCCESS = "000";
+    public final String FAIL = "100";
+    public final String SUCCESS_MSG = "请求成功";
+    public final String FAIL_MSG = "请求失败";
 
     private String version;
 
