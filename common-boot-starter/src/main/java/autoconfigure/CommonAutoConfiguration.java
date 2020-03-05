@@ -3,6 +3,7 @@ package autoconfigure;
 import aaron.common.aop.FullCommonFieldAspect;
 import aaron.common.data.common.CommonState;
 import aaron.common.logging.LoggingAspect;
+import aaron.common.utils.RedisUtil;
 import aaron.common.utils.SnowFlake;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -116,5 +117,10 @@ public class CommonAutoConfiguration {
         CommonState state = new CommonState();
         state.setVersion(version);
         return state;
+    }
+
+    @Bean
+    public RedisUtil redisUtil(RedisTemplate<String,Object> redisTemplate){
+        return new RedisUtil(redisTemplate);
     }
 }
