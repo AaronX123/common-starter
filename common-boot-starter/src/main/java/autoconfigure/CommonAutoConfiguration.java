@@ -1,6 +1,7 @@
 package autoconfigure;
 
 import aaron.common.aop.FullCommonFieldAspect;
+import aaron.common.data.common.CommonExceptionHandler;
 import aaron.common.data.common.CommonState;
 import aaron.common.logging.LoggingAspect;
 import aaron.common.utils.RedisUtil;
@@ -122,5 +123,10 @@ public class CommonAutoConfiguration {
     @Bean
     public RedisUtil redisUtil(RedisTemplate<String,Object> redisTemplate){
         return new RedisUtil(redisTemplate);
+    }
+
+    @Bean
+    public CommonExceptionHandler commonExceptionHandler(){
+        return new CommonExceptionHandler();
     }
 }
