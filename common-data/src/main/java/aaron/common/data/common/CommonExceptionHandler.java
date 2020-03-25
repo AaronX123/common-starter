@@ -42,6 +42,7 @@ public class CommonExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponse<String> otherException(Throwable t){
         log.error("业务异常：{}",StarterError.SYSTEM_UNKNOWN_ERROR.getMsg());
+        log.error("真实异常：",t);
         log.error("异常码：{}",StarterError.SYSTEM_UNKNOWN_ERROR.getCode());
         return new CommonResponse<String>(state.getVersion(),StarterError.SYSTEM_UNKNOWN_ERROR.getCode(),StarterError.SYSTEM_UNKNOWN_ERROR.getMsg(),state.FAIL);
     }
