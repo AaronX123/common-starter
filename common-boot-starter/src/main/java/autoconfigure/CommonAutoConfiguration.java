@@ -123,4 +123,5 @@ public class CommonAutoConfiguration {
     public RedisUtil redisUtil(RedisTemplate<String,Object> redisTemplate){
         return new RedisUtil(redisTemplate);
     }
+
 }
