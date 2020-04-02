@@ -28,7 +28,7 @@ public class CommonUtils {
 
     public static <T> List<T> convertList(List<?> src, Class<T> targetClass){
         if (isEmpty(src) || isEmpty(targetClass)){
-            throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
+            return new ArrayList<>();
         }
         List<T> res = new ArrayList<>();
         for (Object o : src) {
