@@ -86,7 +86,9 @@ public class CommonAutoConfiguration {
         //创建CacheConfig
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair);
 
-        return new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
+
+        return redisCacheManager;
     }
 
 
