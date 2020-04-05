@@ -23,6 +23,7 @@ public enum  StarterError {
     SYSTEM_SERVICE_UNAVAILABLE("000016","服务暂停"),
     SYSTEM_TOKEN_REJECTED("000017","此Token无此访问权限"),
     SYSTEM_USED_TOKEN("000018","Token已经被使用"),
+    SYSTEM_CACHE_TYPE_INVALID("000019","CACHE类型错误"),
     ;
     private String msg;
     private String code;

@@ -21,7 +21,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * @author xiaoyouming
@@ -48,45 +51,123 @@ public class FullCommonFieldAspect {
         if (CommonUtils.isEmpty(params)){
             throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
         }
-        Object param = params[0];
-        if (param instanceof BaseDto){
-            BaseDto dto = (BaseDto) param;
-            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-            FullCommonField fullCommonField = signature.getMethod().getAnnotation(FullCommonField.class);
-            EnumOperation op = fullCommonField.operation();
-            String token = TokenUtils.getToken();
-            UserPermission permission = new UserPermission();
-            try {
-                permission = JwtUtil.parseJwt(token);
-            } catch (Exception e) {
-                if (e instanceof NestedExamException){
-                    throw (NestedExamException)e;
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        FullCommonField fullCommonField = signature.getMethod().getAnnotation(FullCommonField.class);
+        Object[] handledParams = new Object[params.length];
+        if (EnumOperation.INSERT.equals(fullCommonField.operation())){
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] instanceof BaseDto){
+                    handledParams[i] = handleDtoObjectInsert((BaseDto) params[i]);
+                }else if (params[i] instanceof Collection){
+                    Collection collection = (Collection) params[i];
+                    if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
+                        handledParams[i] = handleCollectionDtoObjectInsert(collection);
+                    }
+                }else {
+                    handledParams[i] = params[i];
                 }
-                throw new StarterException(StarterError.SYSTEM_TOKEN_PARSE_ERROR);
             }
-            Long orgId = permission.getOrgId();
-            Long companyId = permission.getCompanyId();
-            Long operator = permission.getId();
-            if (!CommonUtils.notNull(orgId,companyId,operator)){
-                throw new StarterException(StarterError.SYSTEM_REQUIRED_PARAM_MISSING);
+        }else {
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] instanceof BaseDto){
+                    handledParams[i] = handleDtoObjectUpdate((BaseDto) params[i]);
+                }else if (params[i] instanceof Collection){
+                    Collection collection = (Collection) params[i];
+                    if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
+                        handledParams[i] = handleCollectionDtoObjectUpdate(collection);
+                    }
+                }else {
+                    handledParams[i] = params[i];
+                }
             }
-            if (EnumOperation.INSERT.equals(op)){
-                dto.setId(snowFlake.nextId());
-                dto.setCompanyId(companyId);
-                dto.setOrgId(orgId);
-                dto.setCreatedBy(operator);
-                dto.setCreatedTime(new Date());
-                dto.setUpdatedBy(operator);
-                dto.setUpdatedTime(dto.getCreatedTime());
-                dto.setVersion(dto.getCreatedTime().getTime());
-            }else {
-                dto.setUpdatedBy(operator);
-                dto.setUpdatedTime(new Date());
-                dto.setVersion(dto.getUpdatedTime().getTime());
-            }
-            return joinPoint.proceed(params);
         }
-        throw new StarterException(StarterError.SYSTEM_PARAMETER_TYPE_NOT_MATCH);
+        return joinPoint.proceed(handledParams);
+
+    }
+
+    /**
+     * 处理插入时BaseDto类型
+     * @param dto
+     * @return
+     */
+    public Object handleDtoObjectInsert(BaseDto dto){
+        UserPermission userPermission = TokenUtils.getUser();
+        Long orgId  = userPermission.getOrgId();
+        Long companyId = userPermission.getCompanyId();
+        Long operator = userPermission.getId();
+        if (!CommonUtils.notNull(orgId,companyId,operator)){
+            throw new StarterException(StarterError.SYSTEM_TOKEN_REJECTED);
+        }
+        dto.setId(snowFlake.nextId());
+        dto.setCompanyId(companyId);
+        dto.setOrgId(orgId);
+        dto.setCreatedBy(operator);
+        dto.setCreatedTime(new Date());
+        dto.setUpdatedBy(operator);
+        dto.setUpdatedTime(dto.getCreatedTime());
+        dto.setVersion(dto.getCreatedTime().getTime());
+        return dto;
+    }
+
+    /**
+     * 处理插入时集合中含有BaseDto的情况
+     * @param dtoCollection
+     * @return
+     */
+    public Object handleCollectionDtoObjectInsert(Collection<BaseDto> dtoCollection){
+        Iterator iterator = dtoCollection.iterator();
+        Collection collection = new ArrayList();
+        while (iterator.hasNext()){
+            collection.add(handleDtoObjectInsert((BaseDto) iterator.next()));
+        }
+        return collection;
+    }
+
+    public Object handleDtoObjectUpdate(BaseDto dto){
+        UserPermission userPermission = TokenUtils.getUser();
+        dto.setVersion(System.currentTimeMillis());
+        dto.setUpdatedBy(userPermission.getId());
+        dto.setUpdatedTime(new Date());
+        return dto;
+    }
+
+    /**
+     * 对于User服务定制处理
+     * @param dto
+     * @return
+     */
+    public Object handleDtoObjectInsertU(BaseDto dto){
+        UserPermission userPermission = TokenUtils.getUser();
+        dto.setId(snowFlake.nextId());
+        dto.setCreatedBy(userPermission.getId());
+        dto.setCreatedTime(new Date());
+        dto.setUpdatedBy(userPermission.getId());
+        dto.setUpdatedTime(dto.getCreatedTime());
+        dto.setVersion(dto.getCreatedTime().getTime());
+        return dto;
+    }
+
+    public Object handleCollectionDtoObjectInsertU(Collection<BaseDto> dtoCollection){
+        Iterator iterator = dtoCollection.iterator();
+        Collection collection = new ArrayList();
+        while (iterator.hasNext()){
+            collection.add(handleDtoObjectInsertU((BaseDto) iterator.next()));
+        }
+        return collection;
+    }
+
+    public Object handleCollectionDtoObjectUpdate(Collection<BaseDto> dtoCollection){
+        Iterator iterator = dtoCollection.iterator();
+        Collection collection = new ArrayList();
+        while (iterator.hasNext()){
+            collection.add(handleDtoObjectUpdate((BaseDto) iterator.next()));
+        }
+        return collection;
+    }
+
+    public Class getElementClass(Collection collection){
+        Iterator iterator = collection.iterator();
+        return iterator.next().getClass();
     }
 
     @Around(value = "pointCutU()")
@@ -96,40 +177,36 @@ public class FullCommonFieldAspect {
         if (CommonUtils.isEmpty(params)){
             throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
         }
-        Object param = params[0];
-        if (param instanceof BaseDto){
-            BaseDto dto = (BaseDto) param;
-            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-            FullCommonFieldU fullCommonField = signature.getMethod().getAnnotation(FullCommonFieldU.class);
-            EnumOperation op = fullCommonField.operation();
-            String token = TokenUtils.getToken();
-            UserPermission permission = new UserPermission();
-            try {
-                permission = JwtUtil.parseJwt(token);
-            } catch (Exception e) {
-                if (e instanceof NestedExamException){
-                    throw (NestedExamException)e;
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        FullCommonField fullCommonField = signature.getMethod().getAnnotation(FullCommonField.class);
+        Object[] handledParams = new Object[params.length];
+        if (EnumOperation.INSERT.equals(fullCommonField.operation())){
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] instanceof BaseDto){
+                    handledParams[i] = handleDtoObjectInsertU((BaseDto) params[i]);
+                }else if (params[i] instanceof Collection){
+                    Collection collection = (Collection) params[i];
+                    if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
+                        handledParams[i] = handleCollectionDtoObjectInsertU(collection);
+                    }
+                }else {
+                    handledParams[i] = params[i];
                 }
-                throw new StarterException(StarterError.SYSTEM_TOKEN_PARSE_ERROR);
             }
-            Long operator = permission.getId();
-            if (!CommonUtils.notNull(operator)){
-                throw new StarterException(StarterError.SYSTEM_REQUIRED_PARAM_MISSING);
+        }else {
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] instanceof BaseDto){
+                    handledParams[i] = handleDtoObjectUpdate((BaseDto) params[i]);
+                }else if (params[i] instanceof Collection){
+                    Collection collection = (Collection) params[i];
+                    if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
+                        handledParams[i] = handleCollectionDtoObjectUpdate(collection);
+                    }
+                }else {
+                    handledParams[i] = params[i];
+                }
             }
-            if (EnumOperation.INSERT.equals(op)){
-                dto.setId(snowFlake.nextId());
-                dto.setCreatedBy(operator);
-                dto.setCreatedTime(new Date());
-                dto.setUpdatedBy(operator);
-                dto.setUpdatedTime(dto.getCreatedTime());
-                dto.setVersion(dto.getCreatedTime().getTime());
-            }else {
-                dto.setUpdatedBy(operator);
-                dto.setUpdatedTime(new Date());
-                dto.setVersion(dto.getUpdatedTime().getTime());
-            }
-            return joinPoint.proceed(params);
         }
-        throw new StarterException(StarterError.SYSTEM_PARAMETER_TYPE_NOT_MATCH);
+        return joinPoint.proceed(handledParams);
     }
 }
