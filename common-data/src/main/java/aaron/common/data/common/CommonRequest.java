@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author xiaoyouming
@@ -20,6 +21,7 @@ public class CommonRequest<T> {
     private String version;
     private String token;
     @Valid
+    @NotNull
     private T data;
 
 }

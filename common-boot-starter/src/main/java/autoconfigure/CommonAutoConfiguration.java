@@ -1,6 +1,7 @@
 package autoconfigure;
 
 import aaron.common.aop.FullCommonFieldAspect;
+import aaron.common.data.common.CacheConstants;
 import aaron.common.data.common.CommonExceptionHandler;
 import aaron.common.data.common.CommonState;
 import aaron.common.logging.LoggingAspect;
@@ -21,6 +22,10 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xiaoyouming
@@ -83,14 +88,44 @@ public class CommonAutoConfiguration {
         Jackson2JsonRedisSerializer<Object> serializer = jackson2JsonRedisSerializer();
         //创建一个RedisSerializationContext.SerializationPair给定的适配器pair
         RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(serializer);
-        //创建CacheConfig
-        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair);
-
-        RedisCacheManager redisCacheManager = new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
-
+        // 默认key为12小时过期
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisCacheWriter,
+                this.getRedisCacheConfigurationWithTTL(12 * 60 * 60),
+                this.getRedisCacheConfiguration());
         return redisCacheManager;
     }
 
+    /**
+     * 在此配置指定键的过期时间
+     * @return
+     */
+    private Map<String,RedisCacheConfiguration> getRedisCacheConfiguration(){
+        Map<String,RedisCacheConfiguration> map = new HashMap<>();
+        // 设置半小时
+        map.put(CacheConstants.USER_PERMISSION,this.getRedisCacheConfigurationWithTTL(30 * 60));
+        return map;
+    }
+
+    /**
+     * 设置指定时间过期
+     * @param seconds
+     * @return
+     */
+    private RedisCacheConfiguration getRedisCacheConfigurationWithTTL(int seconds){
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
+        redisCacheConfiguration = redisCacheConfiguration.serializeValuesWith(
+                RedisSerializationContext
+                        .SerializationPair
+                        .fromSerializer(jackson2JsonRedisSerializer)
+        ).entryTtl(Duration.ofSeconds(seconds));
+        return redisCacheConfiguration;
+    }
 
     @Bean
     public Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer() {

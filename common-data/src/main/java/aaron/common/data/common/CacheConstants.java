@@ -12,9 +12,11 @@ public class CacheConstants {
     public static final String PAPER = "paper";
     public static final String PAPER_DETAIL = "paper_detail";
     public static final String USER = "user";
+    public static final String USER_PERMISSION = "user_permission";
     public static final String ORG = "org";
     public static final String COMPANY = "company";
     public static final String USER_VAL = "user_val";
     public static final String ORG_VAL = "org_val";
     public static final String COMPANY_VAL = "company_val";
+    public static final String SUBJECT_TYPE_VAL = "subject_type_val";
 }
