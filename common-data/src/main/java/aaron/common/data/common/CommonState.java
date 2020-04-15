@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CommonState {
-    public final String SUCCESS = "000";
+    public final String SUCCESS = "200";
     public final String FAIL = "100";
     public final String SUCCESS_MSG = "请求成功";
     public final String FAIL_MSG = "请求失败";

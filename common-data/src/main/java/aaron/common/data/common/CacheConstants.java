@@ -19,4 +19,6 @@ public class CacheConstants {
     public static final String ORG_VAL = "org_val";
     public static final String COMPANY_VAL = "company_val";
     public static final String SUBJECT_TYPE_VAL = "subject_type_val";
+    public static final String TOKEN = "token";
+    public static final String RESOURCE_MAP = "resource_map";
 }
