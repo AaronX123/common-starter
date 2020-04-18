@@ -36,7 +36,7 @@ public class CommonExceptionHandler {
     public CommonResponse<String> examException(NestedExamException e){
         log.error("业务异常：{}",e.getErrorCode());
         log.error("异常码：{}",e.getMessage());
-        return new CommonResponse<String>(state.getVersion(),generateTraceCode(e.getMessage()),e.getErrorCode(),state.FAIL);
+        return new CommonResponse<String>(state.getVersion(),generateTraceCode(e.getErrorCode()),e.getMessage(),state.FAIL);
     }
 
     @ExceptionHandler(Throwable.class)
