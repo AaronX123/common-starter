@@ -34,8 +34,8 @@ public class CommonExceptionHandler {
     @ExceptionHandler(NestedExamException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponse<String> examException(NestedExamException e){
-        log.error("业务异常：{}",e.getErrorCode());
-        log.error("异常码：{}",e.getMessage());
+        log.error("业务异常：{}",e.getMessage());
+        log.error("异常码：{}",e.getErrorCode());
         return new CommonResponse<String>(state.getVersion(),generateTraceCode(e.getErrorCode()),e.getMessage(),state.FAIL);
     }
 
