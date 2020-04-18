@@ -178,7 +178,7 @@ public class FullCommonFieldAspect {
             throw new StarterException(StarterError.SYSTEM_PARAMETER_IS_NULL);
         }
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        FullCommonField fullCommonField = signature.getMethod().getAnnotation(FullCommonField.class);
+        FullCommonFieldU fullCommonField = signature.getMethod().getAnnotation(FullCommonFieldU.class);
         Object[] handledParams = new Object[params.length];
         if (EnumOperation.INSERT.equals(fullCommonField.operation())){
             for (int i = 0; i < params.length; i++) {

@@ -34,14 +34,14 @@ public class CommonExceptionHandler {
     @ExceptionHandler(NestedExamException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponse<String> examException(NestedExamException e){
-        log.error("业务异常：{}",e.getMessage());
-        log.error("异常码：{}",e.getErrorCode());
-        return new CommonResponse<String>(state.getVersion(),generateTraceCode(e.getErrorCode()),e.getMessage(),state.FAIL);
+        log.error("业务异常：{}",e.getErrorCode());
+        log.error("异常码：{}",e.getMessage());
+        return new CommonResponse<String>(state.getVersion(),generateTraceCode(e.getMessage()),e.getErrorCode(),state.FAIL);
     }
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public CommonResponse<String> otherException(Throwable t){
+    public CommonResponse<String> otherException(Exception t){
         log.error("业务异常：{}",StarterError.SYSTEM_UNKNOWN_ERROR.getMsg());
         log.error("真实异常：",t);
         log.error("异常码：{}",StarterError.SYSTEM_UNKNOWN_ERROR.getCode());

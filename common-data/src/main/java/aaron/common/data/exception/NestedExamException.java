@@ -9,7 +9,7 @@ public class NestedExamException extends RuntimeException{
     private String errorCode;
 
     public NestedExamException(String errorMessage, String errorCode){
-        super(errorCode + " : " + errorMessage);
+        super(errorMessage);
         this.errorCode = errorCode;
     }
 

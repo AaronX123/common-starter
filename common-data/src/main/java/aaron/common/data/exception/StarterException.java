@@ -12,7 +12,7 @@ public class StarterException extends NestedExamException {
     }
 
     public StarterException(StarterError error){
-        super(error.getMsg(),error.getMsg());
+        super(error.getMsg(),error.getCode());
     }
 
     public StarterException(StarterError error, Object ... o){
