@@ -103,6 +103,8 @@ public class CommonAutoConfiguration {
         Map<String,RedisCacheConfiguration> map = new HashMap<>();
         // 设置半小时
         map.put(CacheConstants.USER_PERMISSION,this.getRedisCacheConfigurationWithTTL(30 * 60));
+        map.put(CacheConstants.TOKEN,this.getRedisCacheConfigurationWithTTL(30 * 60));
+        map.put(CacheConstants.RESOURCE_MAP,this.getRedisCacheConfigurationWithTTL(30 * 60));
         return map;
     }
 

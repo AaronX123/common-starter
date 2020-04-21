@@ -26,7 +26,7 @@ public class CommonUtils {
         throw new StarterException(StarterError.SYSTEM_COPY_PROPERTIES_ERROR);
     }
 
-    public static <T> List<T> convertList(List<?> src, Class<T> targetClass){
+    public static <T> List<T> convertList(Collection<?> src, Class<T> targetClass){
         if (isEmpty(src) || isEmpty(targetClass)){
             return new ArrayList<>();
         }
