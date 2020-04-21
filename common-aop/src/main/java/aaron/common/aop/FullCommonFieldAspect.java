@@ -95,9 +95,6 @@ public class FullCommonFieldAspect {
         Long orgId  = userPermission.getOrgId();
         Long companyId = userPermission.getCompanyId();
         Long operator = userPermission.getId();
-        if (!CommonUtils.notNull(orgId,companyId,operator)){
-            throw new StarterException(StarterError.SYSTEM_TOKEN_REJECTED);
-        }
         dto.setId(snowFlake.nextId());
         dto.setCompanyId(companyId);
         dto.setOrgId(orgId);
