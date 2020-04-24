@@ -8,7 +8,9 @@ package aaron.common.data.common;
  */
 public class CacheConstants {
     public static final String CATEGORY = "category";
+    public static final String CATEGORY_VAL = "category";
     public static final String DICTIONARY = "dictionary";
+    public static final String DICTIONARY_VAL = "dictionary_val";
     public static final String PAPER = "paper";
     public static final String PAPER_DETAIL = "paper_detail";
     public static final String USER = "user";

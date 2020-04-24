@@ -95,7 +95,6 @@ public class JwtUtil {
         Map<String, Claim> map = jwt.getClaims();
         Map<String, String> resultMap = new HashMap<>();
         map.forEach((k,v) -> resultMap.put(k, v.asString()));
-        System.out.println(resultMap);
         userPermission.setId(Long.valueOf(resultMap.get(ID)));
         userPermission.setUserName(resultMap.get(USERNAME));
         // 通过size判断是否存在companyId

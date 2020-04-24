@@ -62,6 +62,8 @@ public class FullCommonFieldAspect {
                     Collection collection = (Collection) params[i];
                     if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
                         handledParams[i] = handleCollectionDtoObjectInsert(collection);
+                    }else {
+                        handledParams[i] = params[i];
                     }
                 }else {
                     handledParams[i] = params[i];
@@ -75,6 +77,8 @@ public class FullCommonFieldAspect {
                     Collection collection = (Collection) params[i];
                     if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
                         handledParams[i] = handleCollectionDtoObjectUpdate(collection);
+                    }else {
+                        handledParams[i] = params[i];
                     }
                 }else {
                     handledParams[i] = params[i];
@@ -185,6 +189,8 @@ public class FullCommonFieldAspect {
                     Collection collection = (Collection) params[i];
                     if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
                         handledParams[i] = handleCollectionDtoObjectInsertU(collection);
+                    }else {
+                        handledParams[i] = params[i];
                     }
                 }else {
                     handledParams[i] = params[i];
@@ -198,6 +204,8 @@ public class FullCommonFieldAspect {
                     Collection collection = (Collection) params[i];
                     if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
                         handledParams[i] = handleCollectionDtoObjectUpdate(collection);
+                    }else {
+                        handledParams[i] = params[i];
                     }
                 }else {
                     handledParams[i] = params[i];

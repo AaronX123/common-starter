@@ -1,5 +1,7 @@
 package aaron.common.utils;
 
+import aaron.common.data.common.CommonResponse;
+import aaron.common.data.common.CommonState;
 import aaron.common.data.exception.StarterError;
 import aaron.common.data.exception.StarterException;
 import com.alibaba.fastjson.JSON;
@@ -47,6 +49,9 @@ public class CommonUtils {
         return JSON.parseObject(JSON.toJSONString(src),target);
     }
 
+    public static boolean isSuccess(CommonResponse response){
+        return "200".equals(response.getCode());
+    }
 
     public static boolean isEmpty(Collection collection){
         return collection == null || collection.size() == 0;

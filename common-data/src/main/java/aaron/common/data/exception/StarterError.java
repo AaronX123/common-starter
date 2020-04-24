@@ -24,6 +24,8 @@ public enum  StarterError {
     SYSTEM_TOKEN_REJECTED("000017","此Token无此访问权限"),
     SYSTEM_USED_TOKEN("000018","Token已经被使用"),
     SYSTEM_CACHE_TYPE_INVALID("000019","CACHE类型错误"),
+    SYSTEM_API_ERROR("000020","API调用错误，原因为:[%s]"),
+    SYSTEM_API_ERROR_TYPE("000021","[%s] API调用错误，原因为：[%s]")
     ;
     private String msg;
     private String code;

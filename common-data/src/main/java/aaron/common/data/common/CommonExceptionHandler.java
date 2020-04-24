@@ -2,7 +2,6 @@ package aaron.common.data.common;
 
 import aaron.common.data.exception.NestedExamException;
 import aaron.common.data.exception.StarterError;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author xiaoyouming
@@ -32,7 +34,7 @@ public class CommonExceptionHandler {
      * @return
      */
     @ExceptionHandler(NestedExamException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public CommonResponse<String> examException(NestedExamException e){
         log.error("业务异常：{}",e.getMessage());
         log.error("异常码：{}",e.getErrorCode());
@@ -84,8 +86,13 @@ public class CommonExceptionHandler {
     }
 
     private String generateTraceCode(String errorCode){
-        String res = errorCode + ":" + IdWorker.get32UUID().substring(0,8);
+        String res = errorCode + ":" + get32UUID().substring(0,8);
         log.error("跟踪码为:{}，业务异常码为:{}",res,errorCode);
         return res;
+    }
+
+    private static String get32UUID() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        return new UUID(random.nextLong(), random.nextLong()).toString().replace("-", "");
     }
 }
