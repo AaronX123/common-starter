@@ -56,9 +56,12 @@ public class FullCommonFieldAspect {
         Object[] handledParams = new Object[params.length];
         if (EnumOperation.INSERT.equals(fullCommonField.operation())){
             for (int i = 0; i < params.length; i++) {
+                // 判断是否为BaseDto子类
                 if (params[i] instanceof BaseDto){
                     handledParams[i] = handleDtoObjectInsert((BaseDto) params[i]);
-                }else if (params[i] instanceof Collection){
+                }
+                // 如果是集合类型，则判断集合中元素是否为BaseDto子类
+                else if (params[i] instanceof Collection){
                     Collection collection = (Collection) params[i];
                     if (BaseDto.class.isAssignableFrom(getElementClass(collection))){
                         handledParams[i] = handleCollectionDtoObjectInsert(collection);
@@ -88,6 +91,7 @@ public class FullCommonFieldAspect {
         return joinPoint.proceed(handledParams);
 
     }
+
 
     /**
      * 处理插入时BaseDto类型
@@ -166,6 +170,11 @@ public class FullCommonFieldAspect {
         return collection;
     }
 
+    /**
+     * 获取集合中元素类型
+     * @param collection
+     * @return
+     */
     public Class getElementClass(Collection collection){
         Iterator iterator = collection.iterator();
         return iterator.next().getClass();
